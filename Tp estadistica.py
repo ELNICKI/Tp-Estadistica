@@ -127,6 +127,9 @@ for i in listaFrecuenciasAbsolutas:
 
 for i in listaFrecuenciasAbsAcum:
     listaFrecuenciasRelAcum.append(round(i / muestraTotal , 5))
+
+
+intervalos = list(range(55000, 127000, 8000))
  
 #Valores.
 print("La muestra es de:",muestraTotal)
@@ -159,3 +162,8 @@ print("Por debajo de", round((((((30*muestraTotal)/100) - 48157)/23990)*8000)+ 7
 
 #Cierre del archivo.
 miArchivo.close()
+
+
+df = pd.DataFrame({"x": intervalos, "f": frecuenciasAbsolutasIntervalos, "F": frecuenciasAbsAcumIntevalos, "fr": frecuenciasRelativasIntervalos, "Fr": frecuenciasRelAcumIntervalos})
+print(df)
+
