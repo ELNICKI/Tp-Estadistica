@@ -1,4 +1,3 @@
-from itertools import count
 import pandas as pd
 
 #Abro el archivo como una variable.
@@ -8,34 +7,26 @@ miArchivo = open("TUP2.txt", "r")
 datos = miArchivo.read()
 
 #Por cada ";" que aparezca en el archvio, creo un elemento singular en la lista 'datosLista'.
-datosLista = datos.split(";")
+listaDatos = datos.split(";")
+listaDatos = list(map(int, listaDatos))
 
 #Creamos la variable muestraTotal (Es la cantidad total de elementos con los que contamos).
-muestraTotal = int(len(datosLista))
+muestraTotal = len(listaDatos)
 
 #Ordenamos la datosLista(lista de todos los datos) de menor a mayor.
-datosLista.sort()
+listaDatos.sort()
 
-#Imprimimos la longitud total de la lista
-print("La muestra es de:" , muestraTotal, "datos.")
-
-#Lista que contiene el dato y su frecuencia.
-listaValores = []
-auxiliar = 0
+#Lista que contiene cada dato sin repetir.
+listaValores = [listaDatos[0]]
 
 #Guardamos el primer valor de la lista en un auxiliar.
-if datosLista[0] != auxiliar:
-    listaValores.append(datosLista[0])
-    auxiliar = datosLista[0]
+auxiliar = listaDatos[0]
 
 #Recorremos la lista y añadimos los elementos que no se repiten a una nueva lista.
-for i in datosLista:
+for i in listaDatos:
     if i != auxiliar:
         listaValores.append(i)
         auxiliar = i
-
-#Imprimimos la lista con los valores que no se repiten
-print(listaValores)
 
 #Rellenamos las frecuencias de los valores y creamos una variable para las frecuencias.
 listaFrecuencia = [0]
@@ -44,15 +35,14 @@ listaFrecuencia = [0]
 #Iteramos datosLista y para cada uno de sus elemento si son distintos al auxiliar, en la locación que tiene listaFrecuencia con índice(iterador) sumamos uno a la frecuencia.
 #Sumamos uno al iterador una vez que no se repita más el número que tiene el auxiliar guardado.
 iterador = 0
-auxiliar = datosLista[0]
-for i in datosLista:
+auxiliar = listaDatos[0]
+for i in listaDatos:
     if i != auxiliar:
         auxiliar = i
         iterador += 1
         listaFrecuencia.append(0)
     listaFrecuencia[iterador] += 1
 
-print(listaFrecuencia)
 print(len(listaValores))
 print(len(listaFrecuencia))
 
@@ -60,7 +50,7 @@ print(len(listaFrecuencia))
 print(muestraTotal)
 print(sum(listaFrecuencia))
 
-df = pd.DataFrame(list(zip(listaValores,listaFrecuencia)), columns=["Valores", "Frecuancia"])
+df = pd.DataFrame(list(zip(listaValores,listaFrecuencia)), columns=["Valores", "Frecuencia"])
 print(df)
 
 
