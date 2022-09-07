@@ -1,4 +1,5 @@
 import pandas as pd
+import plotly.express as px
 
 #Abro el archivo como una variable.
 miArchivo = open("TUP2.txt", "r")
@@ -24,12 +25,17 @@ auxiliar = listaDatos[0]
 
 #Datos agrupados por intervalos.
 listaDatosAgrupados = list(range(55000, 127000 + 1 , 6000))
+menoresA70 = 0
 
 #Recorremos la lista y añadimos los elementos que no se repiten a una nueva lista.
 for i in listaDatos:
     if i != auxiliar:
         listaValores.append(i)
         auxiliar = i
+    if i < 70000:
+        menoresA70 = menoresA70 + 1
+
+porcentajeMenoresA70 = round((menoresA70 / muestraTotal) * 100 ,2)
 
 #Rellenamos las frecuencias de los valores y creamos una variable para las frecuencias.
 listaFrecuenciasAbsolutas = [0]
@@ -75,6 +81,26 @@ print("El valor mínimo es:", listaValores[0])
 print("El valor máximo es:", listaValores[-1])
 print("Datos agrupados de a 6000 km.")
 print(listaDatosAgrupados)
+print("Los autos que realizan la VTV con menos de 70 mil km son:",menoresA70)
+print("El porcentaje de los autos que realizan la VTV con menos de 70 mil km son:", porcentajeMenoresA70, "%")
+
 
 #Cierre del archivo.
 miArchivo.close()
+
+
+#Plotly.
+numero_intervalos = max(listaDatos) - min(listaDatos) + 1
+
+histograma = px.histogram(listaDatos,
+                          nbins=numero_intervalos,
+                          title='Histograma de edades - Plotly - codigopiton.com',
+                          color_discrete_sequence=['#F2AB6D'])
+
+# configuramos las etiquetas de los ejes
+histograma.update_layout(
+    xaxis_title="Edades",
+    yaxis_title="Frecuencia"
+)
+
+histograma.show()
