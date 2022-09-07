@@ -1,5 +1,8 @@
 import pandas as pd
 import plotly.express as px
+from statistics import mean, median, mode, multimode , variance
+import numpy as np
+from scipy.stats import skew
 
 #Abro el archivo como una variable.
 miArchivo = open("TUP2.txt", "r")
@@ -21,10 +24,8 @@ listaDatos.sort()
 listaValores = [listaDatos[0]]
 
 #Guardamos el primer valor de la lista en un auxiliar.
-auxiliar = listaDatos[0]
+auxiliar = 0
 
-#Datos agrupados por intervalos.
-listaDatosAgrupados = list(range(55000, 127000 + 1 , 6000))
 menoresA70 = 0
 
 #Recorremos la lista y añadimos los elementos que no se repiten a una nueva lista.
@@ -36,6 +37,64 @@ for i in listaDatos:
         menoresA70 = menoresA70 + 1
 
 porcentajeMenoresA70 = round((menoresA70 / muestraTotal) * 100 ,2)
+
+#Variables para agrupados.
+datosIntervalo1 = 0
+datosIntervalo2 = 0
+datosIntervalo3 = 0
+datosIntervalo4 = 0
+datosIntervalo5 = 0
+datosIntervalo6 = 0
+datosIntervalo7 = 0
+datosIntervalo8 = 0
+datosIntervalo9 = 0
+frecuenciasAbsolutasIntervalos = []
+
+for i in listaDatos:
+    if i >= 55000 and i < 63000:
+        datosIntervalo1 += 1
+    elif i >= 63000 and i < 71000:
+        datosIntervalo2 += 1
+    elif i >= 71000 and i < 79000:
+        datosIntervalo3 += 1
+    elif i >= 79000 and i < 87000:
+        datosIntervalo4 += 1
+    elif i >= 87000 and i < 95000:
+        datosIntervalo5 += 1
+    elif i >= 95000 and i < 103000:
+        datosIntervalo6 += 1
+    elif i >= 103000 and i < 111000:
+        datosIntervalo7 += 1
+    elif i >= 111000 and i < 119000:
+        datosIntervalo8 += 1
+    else:
+        datosIntervalo9 += 1
+
+frecuenciasAbsolutasIntervalos.append(datosIntervalo1)
+frecuenciasAbsolutasIntervalos.append(datosIntervalo2)
+frecuenciasAbsolutasIntervalos.append(datosIntervalo3)
+frecuenciasAbsolutasIntervalos.append(datosIntervalo4)
+frecuenciasAbsolutasIntervalos.append(datosIntervalo5)
+frecuenciasAbsolutasIntervalos.append(datosIntervalo6)
+frecuenciasAbsolutasIntervalos.append(datosIntervalo7)
+frecuenciasAbsolutasIntervalos.append(datosIntervalo8)
+frecuenciasAbsolutasIntervalos.append(datosIntervalo9)
+
+
+frecuenciasAbsAcumIntevalos = []
+auxiliar = 0
+for i in frecuenciasAbsolutasIntervalos:
+    frecuenciasAbsAcumIntevalos.append(i + auxiliar)
+    auxiliar= auxiliar + i
+
+frecuenciasRelativasIntervalos = []
+frecuenciasRelAcumIntervalos = []
+
+for i in frecuenciasAbsolutasIntervalos:
+    frecuenciasRelativasIntervalos.append(round((i / muestraTotal), 5))
+
+for i in frecuenciasAbsAcumIntevalos:
+    frecuenciasRelAcumIntervalos.append(round((i / muestraTotal), 2))
 
 #Rellenamos las frecuencias de los valores y creamos una variable para las frecuencias.
 listaFrecuenciasAbsolutas = [0]
@@ -51,13 +110,6 @@ for i in listaDatos:
         iterador += 1
         listaFrecuenciasAbsolutas.append(0)
     listaFrecuenciasAbsolutas[iterador] += 1
-
-print("La cantidad de elementos no repetidos son:", len(listaValores))
-print("La catidad de datos individuales, que aparecen 1 o más veces son:",len(listaFrecuenciasAbsolutas))
-
-#Corroboramos que la sumatoria de frecuencias sea igual a el número de la muestra total.
-print("La muestra es de:",muestraTotal)
-print("La sumatoria de frecuencias es:",sum(listaFrecuenciasAbsolutas))
 
 #Cálculo de frecuencias absoluta acumulada.
 listaFrecuenciasAbsAcum = []
@@ -76,31 +128,32 @@ for i in listaFrecuenciasAbsolutas:
 for i in listaFrecuenciasAbsAcum:
     listaFrecuenciasRelAcum.append(round(i / muestraTotal , 5))
  
-#Valores mínimo y máximo.
+#Valores.
+print("La muestra es de:",muestraTotal)
+print("La sumatoria de frecuencias es:",sum(listaFrecuenciasAbsolutas))
+print("La cantidad de elementos no repetidos son:", len(listaValores))
 print("El valor mínimo es:", listaValores[0])
 print("El valor máximo es:", listaValores[-1])
-print("Datos agrupados de a 6000 km.")
-print(listaDatosAgrupados)
+print("Datos agrupados en intervalos de 8000 km.")
 print("Los autos que realizan la VTV con menos de 70 mil km son:",menoresA70)
 print("El porcentaje de los autos que realizan la VTV con menos de 70 mil km son:", porcentajeMenoresA70, "%")
+print("Frecuencias por cada intervalo:",frecuenciasAbsolutasIntervalos)
+print("Frecuencias acumuladas por intervalos:", frecuenciasAbsAcumIntevalos)
+print("Frecuencias relativas por intervalos:", frecuenciasRelativasIntervalos)
+print("Frecuencias relativas acumuladas por intervalos:", frecuenciasRelAcumIntervalos)
 
+#Cálculos de medidas de tendencias
+print("Esta es la moda más pequeña:" , mode(listaDatos))
+print("Esta es la mediana:" ,median(listaDatos))
+print("Esta es la media:", round(mean(listaDatos),2))
+print("Estas son todas las modas:", multimode(listaDatos), "C/U se repite 12 veces.")
 
+#Cálculo de medidas de dispersión.
+print("Esta es la varianza:" ,round(variance(listaDatos),4))
+print("Este es el desvío estandar:", round(np.sqrt(variance(listaDatos)),4))
+print("Este es el coeficiente de variación:", round((np.sqrt(variance(listaDatos))/ round(mean(listaDatos),2)) * 100, 2) , "%")
+print("Este es el coeficiente de asimetría de pearson:", round(skew(listaDatos),4))
+print("P sub 30", (30 * muestraTotal)/ 100)
+print("P sub 30, se encuentra en el segundo intervalo.")
 #Cierre del archivo.
 miArchivo.close()
-
-
-#Plotly.
-numero_intervalos = max(listaDatos) - min(listaDatos) + 1
-
-histograma = px.histogram(listaDatos,
-                          nbins=numero_intervalos,
-                          title='Histograma de edades - Plotly - codigopiton.com',
-                          color_discrete_sequence=['#F2AB6D'])
-
-# configuramos las etiquetas de los ejes
-histograma.update_layout(
-    xaxis_title="Edades",
-    yaxis_title="Frecuencia"
-)
-
-histograma.show()
