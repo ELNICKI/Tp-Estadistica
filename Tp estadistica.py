@@ -2,8 +2,7 @@ import pandas as pd
 from statistics import mean, median, mode, multimode , variance
 import numpy as np
 from scipy.stats import skew
-import plotly.graph_objects as go
-import plotly.express as px
+import matplotlib.pyplot as plt
 
 #Abro el archivo como una variable.
 miArchivo = open("TUP2.txt", "r")
@@ -169,22 +168,16 @@ df = pd.DataFrame({"x": intervalos, "f": frecuenciasAbsolutasIntervalos, "F": fr
 print(df)
 
 
+intervalos=[55000, 63000, 71000, 79000, 86000, 95000, 103000, 111000, 119000, 127000]
 
-#Plotly.
-numero_intervalos = [55000, 63000, 71000, 79000, 87000, 95000, 103000, 111000, 119000, 127000]
+plt.xticks(intervalos)
+plt.hist(listaDatos, bins=intervalos)
+
+y,edges,_=plt.hist(listaDatos, bins=intervalos, histtype='step', edgecolor='k')
+
+midpoints=0.5*(edges[1:]+edges[:-1])
+plt.plot(midpoints,y, 'r-*')
 
 
-histograma = px.histogram(
-    listaDatos,
-    nbins=9,
-    title='Kilometraje de autos',
-    color_discrete_sequence=['#F2AB6D']
-)
 
-# configuramos las etiquetas de los ejes
-histograma.update_layout(
-    xaxis_title="Kilometraje",
-    yaxis_title="Frecuencia"
-)
-
-histograma.show()
+plt.show()
