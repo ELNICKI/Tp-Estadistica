@@ -31,7 +31,7 @@ import statistics
 # %matplotlib inline
 
 df = pd.read_csv('data.csv', header=None)
-res, bins = pd.cut(df[df.columns[0]],range(55000, 130000, 7100), right=False, retbins=True)
+res, bins = pd.cut(df[df.columns[0]],range(55000, 130000, 8000), right=False, retbins=True)
 res = pd.DataFrame(res)
 res
 
@@ -54,10 +54,10 @@ fig, ax = plt.subplots(figsize=(6, 3.5))
 
 cumulative = np.cumsum(pd.Series(samples))
 # Creamos grafico de frecuencias acumuladas
-plt.plot(bins[:-1], cumulative, c='blue')
+plt.plot(bins[1:], cumulative, c='blue')
 plt.show()
 
-plt.plot(bins[:-1], samples, c='green')
+plt.plot(bins[1:], samples, c='green')
 plt.show()
 
 medidas_tendencia_central = {}
@@ -76,38 +76,8 @@ medidas_dispersion['Cuartil 3'] = df[df.columns[0]].quantile(0.75)
 medidas_dispersion['Rango intercuartilico'] = df[df.columns[0]].quantile(0.75) - df[df.columns[0]].quantile(0.25)
 medidas_dispersion['Coeficiente de variación'] = (df[df.columns[0]].std() / df[df.columns[0]].mean()) * 100
 medidas_dispersion['Coeficiente de asimetría de Pearson'] = df[df.columns[0]].skew()
-medidas_dispersion['P30'] = 69200 + ((((30 * 212992) / 100) - 42754) / 21277) * 7100
+medidas_dispersion['P30'] = 71000 + ((((30 * 212992) / 100) - 48157) / 23990) * 8000
 
 medidas_dispersion
 
 df.boxplot(column=[df.columns[0]])
-
-#Quitamos valores extremos
-df2 = df[df[df.columns[0]] > 10000]
-
-res2, bins = pd.cut(df2[df2.columns[0]],10, right=False, retbins=True)
-res2 = pd.DataFrame(res2)
-
-samples2 = res2.value_counts().sort_index()
-samples2.to_numpy().flatten()
-
-fig, ax = plt.subplots(figsize=(6, 3.5))
-(
-    pd.Series(samples2.sort_index()).plot.bar(ax=ax)
-)
-
-#Ejercicio: Quitar los valores extremos grandes usando nombre variables df3, res3 y samples3
-
-df3 = df[(df[df.columns[0]] < 100000) & (df[df.columns[0]] > 10000)]
-
-res3, bins = pd.cut(df3[df3.columns[0]],10, right=False, retbins=True)
-res3 = pd.DataFrame(res3)
-
-samples3 = res3.value_counts().sort_index()
-samples3.to_numpy().flatten()
-
-fig, ax = plt.subplots(figsize=(6, 3.5))
-(
-    pd.Series(samples3.sort_index()).plot.bar(ax=ax)
-)
-

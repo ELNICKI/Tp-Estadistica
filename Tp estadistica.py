@@ -158,7 +158,7 @@ print("Este es el coeficiente de variación:", round((np.sqrt(variance(listaDato
 print("Este es el coeficiente de asimetría de pearson:", round(skew(listaDatos),4))
 print("Posición de P sub 30 en la frecuencia absoluta acumulada.", (30 * muestraTotal)/ 100)
 print("P sub 30, se encuentra en el tercer intervalo.")
-print("Por debajo de", round((71000 + ((((30 * muestraTotal) / 100) - 48157) / 23990) * 8000)), "se encuentra el 30%" , "de los datos.")
+print("Por debajo de", round(71000 + ((((30 * muestraTotal) / 100) - 48157) / 23990) * 8000, 4), "se encuentra el 30%" , "de los datos.")
 
 #Cierre del archivo.
 miArchivo.close()
