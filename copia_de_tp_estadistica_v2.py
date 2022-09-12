@@ -76,7 +76,7 @@ medidas_dispersion['Cuartil 3'] = df[df.columns[0]].quantile(0.75)
 medidas_dispersion['Rango intercuartilico'] = df[df.columns[0]].quantile(0.75) - df[df.columns[0]].quantile(0.25)
 medidas_dispersion['Coeficiente de variación'] = (df[df.columns[0]].std() / df[df.columns[0]].mean()) * 100
 medidas_dispersion['Coeficiente de asimetría de Pearson'] = df[df.columns[0]].skew()
-medidas_dispersion['P30'] = 71000 + ((((30 * 212992) / 100) - 48157) / 23990) * 8000
+medidas_dispersion['P30'] = np.percentile(df[df.columns[0]], 30)
 
 medidas_dispersion
 
